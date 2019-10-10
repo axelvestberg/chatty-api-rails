@@ -14,6 +14,5 @@ channels = Channel.create([
 ])
 
 programs = Program.create([
-	{ title: 'Rapport', start: "2019-10-09 20:00:00", stop: "2019-10-09 21:00:00", live: false, channel_id: 1},
-	{title: 'Morgonsoffan', live: true, channel_id: 1}
+	{ title: 'Dummy program', start: "2019-10-09 20:00:00", stop: "2019-10-09 21:00:00", live: false, channel_id: 1}
 ])
