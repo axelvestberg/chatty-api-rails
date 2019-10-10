@@ -3,41 +3,55 @@ require 'json'
 
 class ExternalApi
   include HTTParty
-  base_uri 'https://json.xmltv.se'
+  base_uri 'https://json.xmltv.se'	
 
 	def initialize(channel, date)
 		@channel = channel
 		@date = date
 	end
 
-  def svt1
+  def url
     self.class.get("/#{@channel}_#{@date}.json").parsed_response
-  end
-
-  def tv4
-    self.class.get("/tv4.se_2019-10-09.json")
 	end
 end
 
-response = ExternalApi.new("svt1.svt.se", Time.now.strftime("%Y-%m-%d"))
-res = response.svt1['jsontv']['programme']
+def fetch_tv_data
+	@savedArray = []
+	@notSavedArray = []
+	iterate_channels
+	puts "Found #{@notSavedArray.length} programs that already exist in database"
+	puts "Found #{@savedArray.length} programs and added them to database"
+	puts "-- Fetch complete --"
+end
 
-# [/^([^.]+)/] regex for finding string before first period .
+def iterate_channels
+	cha = ["svt1.svt.se", "svt2.svt.se", "tv3.se", "tv4.se", "kanal5.se", "tv6.se"]
+	cha.each_with_index do |name, index|
+	@indexplus = index + 1
+	response = ExternalApi.new(cha[index], Time.now.strftime("%Y-%m-%d"))
+	@res = response.url['jsontv']['programme']
+	iterate_programs
+	end
+end
 
-res.each do |program, index|
-	existing_program = Program.find_by(title: program['title'], start: program['start'])
-	if !existing_program || Program.count == 0
-		programs = Program.new do |key|
-		key.title = program['title']
-		key.start = program['start']
-		key.stop = program['stop']
-		key.live = false
-		key.channel_id = 1
-		end
-		if programs.save
-			puts "programs saved"
-		else
-			puts "progams not saved"
+def iterate_programs
+	@res.each do |program, index|
+		existing_program = Program.find_by(title: program['title'], start: program['start'])
+		if !existing_program || Program.count == 0
+			programs = Program.new do |key|
+				key.title = program['title']
+				key.start = program['start']
+				key.stop = program['stop']
+				key.live = false
+				key.channel_id = @indexplus
+			end
+			if programs.save
+				@savedArray.push(program['title'])
+			else
+				@notSavedArray.push(program['title'])
+			end
 		end
 	end
 end
+
+fetch_tv_data

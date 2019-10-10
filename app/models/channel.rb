@@ -4,7 +4,8 @@ class Channel < ApplicationRecord
 	def as_json(options={})
 		super(:include => {
 						:programs => {:only => [:title, :start, :stop, :live]}
-			}
+			},
+			:except => [:created_at, :updated_at]
 		)	
 		end
 end
