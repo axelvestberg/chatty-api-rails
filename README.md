@@ -1,4 +1,4 @@
-# README
+# Api for tv data in sweden
 
 ## TO DO
 - Fetch xmltv json data
@@ -8,7 +8,10 @@
 - Create cron job fetching data once every day
 - Delete program data that is older than todays date
 - Serialize json to remove created_at and updated_at
-
+- Deploy updates to heroku
+- Create a background job to fetch todays data and delete old data
+- Render a page with information on root url
+- Make it generalized for all channels
 
 
 This README would normally document whatever steps are necessary to get the

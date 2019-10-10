@@ -1,19 +1,10 @@
 require 'httparty'
 require 'json'
-# Use the class methods to get down to business quickly
-# response = HTTParty.get('https://json.xmltv.se/svt1.svt.se_2019-10-09.json')
 
-# puts response.body, response.code, response.message, response.headers.inspect
-
-# Or wrap things up in your own class
 class ExternalApi
   include HTTParty
   base_uri 'https://json.xmltv.se'
 
-  # def initialize(service, page)
-  #   @options = { query: { site: service, page: page } }
-	# end
-	
 	def initialize(channel, date)
 		@channel = channel
 		@date = date
@@ -29,10 +20,9 @@ class ExternalApi
 end
 
 response = ExternalApi.new("svt1.svt.se", Time.now.strftime("%Y-%m-%d"))
-# obj = JSON.parse(response)
 res = response.svt1['jsontv']['programme']
 
-# puts @channel[/^([^.]+)/]
+# [/^([^.]+)/] regex for finding string before first period .
 
 res.each do |program, index|
 	existing_program = Program.find_by(title: program['title'], start: program['start'])
