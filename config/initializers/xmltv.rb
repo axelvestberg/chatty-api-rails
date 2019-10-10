@@ -26,18 +26,38 @@ end
 
 def iterate_channels
 	cha = ["svt1.svt.se", "svt2.svt.se", "tv3.se", "tv4.se", "kanal5.se", "tv6.se"]
-	cha.each_with_index do |name, index|
-	@indexplus = index + 1
-	response = ExternalApi.new(cha[index], Time.now.strftime("%Y-%m-%d"))
-	@res = response.url['jsontv']['programme']
-	iterate_programs
+
+	cha.each_with_index do |channel, index|
+
+		existing_channel = Channel.find_by(name: cha[index][/^([^.]+)/])
+
+		if !existing_channel
+			channels = Channel.new do |key|
+				key.name = cha[index][/^([^.]+)/]
+			end
+
+			if channels.save
+				puts "Channel saved"
+			else
+				puts "Channel not saved"
+			end
+
+			@indexplus = index + 1
+			response = ExternalApi.new(cha[index], Time.now.strftime("%Y-%m-%d"))
+			@res = response.url['jsontv']['programme']
+			iterate_programs
+
+		end
 	end
 end
 
 def iterate_programs
+
 	@res.each do |program, index|
+
 		existing_program = Program.find_by(title: program['title'], start: program['start'])
-		if !existing_program || Program.count == 0
+
+		if !existing_program
 			programs = Program.new do |key|
 				key.title = program['title']
 				key.start = program['start']
@@ -45,11 +65,13 @@ def iterate_programs
 				key.live = false
 				key.channel_id = @indexplus
 			end
+			
 			if programs.save
 				@savedArray.push(program['title'])
 			else
 				@notSavedArray.push(program['title'])
 			end
+
 		end
 	end
 end
