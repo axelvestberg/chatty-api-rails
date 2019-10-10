@@ -6,12 +6,12 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# channels = Channel.create([
-# 	{ name: 'SVT1' }, 
-# 	{ name: 'SVT2' }, 
-# 	{ name: 'TV3' }, 
-# 	{ name: 'TV4' }
-# ])
+channels = Channel.create([
+	{ name: 'svt1' }, 
+	{ name: 'svt2' }, 
+	{ name: 'tv3' }, 
+	{ name: 'tv4' }
+])
 
 # programs = Program.create([
 # 	{ title: 'Dummy program', start: "2019-10-09 20:00:00", stop: "2019-10-09 21:00:00", live: false, channel_id: 1}
