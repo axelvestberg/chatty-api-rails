@@ -41,6 +41,7 @@ res.each do |program, index|
 		key.title = program['title']
 		key.start = program['start']
 		key.stop = program['stop']
+		key.live = false
 		key.channel_id = 1
 		end
 		if programs.save
