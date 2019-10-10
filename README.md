@@ -7,6 +7,8 @@
 - Store formatted data in database
 - Create cron job fetching data once every day
 - Delete program data that is older than todays date
+- Serialize json to remove created_at and updated_at
+
 
 
 This README would normally document whatever steps are necessary to get the
