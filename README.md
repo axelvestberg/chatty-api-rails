@@ -12,6 +12,10 @@
 - Create a background job to fetch todays data and delete old data
 - Render a page with information on root url
 - Make it generalized for all channels
+- Fix the error of not being able to fetch one program / channel - channel/1 program/2
+
+## DONE
+
 
 
 This README would normally document whatever steps are necessary to get the
